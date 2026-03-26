@@ -1022,7 +1022,7 @@ static const struct rpmh_vreg_hw_data pmic5_pldo530_mvp600 = {
 	.regulator_type = VRM,
 	.ops = &rpmh_regulator_vrm_drms_ops,
 	.voltage_ranges = (struct linear_range[]) {
-		REGULATOR_LINEAR_RANGE(1500000, 0, 255, 8000),
+		REGULATOR_LINEAR_RANGE(1504000, 0, 255, 8000),
 	},
 	.n_linear_ranges = 1,
 	.n_voltages = 256,
@@ -1396,7 +1396,6 @@ static const struct rpmh_vreg_init_data pm8010_vreg_data[] = {
 	RPMH_VREG("ldo5",  LDO,  5, &pmic5_pldo502,   "vdd-l5"),
 	RPMH_VREG("ldo6",  LDO,  6, &pmic5_pldo502ln, "vdd-l6"),
 	RPMH_VREG("ldo7",  LDO,  7, &pmic5_pldo502,   "vdd-l7"),
-	{}
 };
 
 static const struct rpmh_vreg_init_data pm6150_vreg_data[] = {
@@ -1513,7 +1512,7 @@ static const struct rpmh_vreg_init_data pmh0101_vreg_data[] = {
 	RPMH_VREG("ldo13",  LDO, 13, &pmic5_pldo530_mvp150,     "vdd-l2-l13-l14"),
 	RPMH_VREG("ldo14",  LDO, 14, &pmic5_pldo530_mvp150,     "vdd-l2-l13-l14"),
 	RPMH_VREG("ldo15",  LDO, 15, &pmic5_nldo530,      "vdd-l15"),
-	RPMH_VREG("ldo16",  LDO, 16, &pmic5_pldo530_mvp600,      "vdd-l5-l16"),
+	RPMH_VREG("ldo16",  LDO, 15, &pmic5_pldo530_mvp600,      "vdd-l5-l16"),
 	RPMH_VREG("ldo17",  LDO, 17, &pmic5_pldo515_mv,   "vdd-l17"),
 	RPMH_VREG("ldo18",  LDO, 18, &pmic5_nldo530,      "vdd-l18"),
 	RPMH_VREG("bob1",   BOB, 1,  &pmic5_bob,          "vdd-bob1"),
