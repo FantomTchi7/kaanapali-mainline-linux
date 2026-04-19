@@ -6,9 +6,7 @@
 #include <linux/clk-provider.h>
 #include <linux/mod_devicetable.h>
 #include <linux/module.h>
-#include <linux/of.h>
 #include <linux/platform_device.h>
-#include <linux/pm_runtime.h>
 #include <linux/regmap.h>
 
 #include <dt-bindings/clock/qcom,glymur-dispcc.h>
@@ -747,7 +745,6 @@ static struct clk_regmap_div disp_cc_mdss_byte0_div_clk_src = {
 			&disp_cc_mdss_byte0_clk_src.clkr.hw,
 		},
 		.num_parents = 1,
-		.flags = CLK_SET_RATE_PARENT,
 		.ops = &clk_regmap_div_ops,
 	},
 };
@@ -762,7 +759,6 @@ static struct clk_regmap_div disp_cc_mdss_byte1_div_clk_src = {
 			&disp_cc_mdss_byte1_clk_src.clkr.hw,
 		},
 		.num_parents = 1,
-		.flags = CLK_SET_RATE_PARENT,
 		.ops = &clk_regmap_div_ops,
 	},
 };
@@ -1925,7 +1921,7 @@ static struct clk_alpha_pll *disp_cc_glymur_plls[] = {
 	&disp_cc_pll1,
 };
 
-static u32 disp_cc_glymur_critical_cbcrs[] = {
+static const u32 disp_cc_glymur_critical_cbcrs[] = {
 	0xe07c, /* DISP_CC_SLEEP_CLK */
 	0xe05c, /* DISP_CC_XO_CLK */
 };
@@ -1938,7 +1934,7 @@ static const struct regmap_config disp_cc_glymur_regmap_config = {
 	.fast_io = true,
 };
 
-static struct qcom_cc_driver_data disp_cc_glymur_driver_data = {
+static const struct qcom_cc_driver_data disp_cc_glymur_driver_data = {
 	.alpha_plls = disp_cc_glymur_plls,
 	.num_alpha_plls = ARRAY_SIZE(disp_cc_glymur_plls),
 	.clk_cbcrs = disp_cc_glymur_critical_cbcrs,
