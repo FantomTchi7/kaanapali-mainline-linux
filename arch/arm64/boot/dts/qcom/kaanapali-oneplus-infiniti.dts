@@ -2,6 +2,8 @@
 
 /dts-v1/;
 
+#include <dt-bindings/clock/qcom,kaanapali-dispcc.h>
+#include <dt-bindings/clock/qcom,kaanapali-gcc.h>
 #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
 
 #include "kaanapali.dtsi"
@@ -25,6 +27,25 @@
             height = <2772>;
             stride = <(1272 * 4)>;
             format = "a8r8g8b8";
+
+            clocks = <&gcc GCC_DISP_HF_AXI_CLK>,
+                 <&dispcc DISP_CC_MDSS_AHB_CLK>,
+                 <&dispcc DISP_CC_MDSS_MDP_CLK>,
+                 <&dispcc DISP_CC_MDSS_MDP_LUT_CLK>,
+                 <&dispcc DISP_CC_MDSS_VSYNC_CLK>,
+                 <&dispcc DISP_CC_MDSS_BYTE0_CLK>,
+                 <&dispcc DISP_CC_MDSS_BYTE0_INTF_CLK>,
+                 <&dispcc DISP_CC_MDSS_PCLK0_CLK>,
+                 <&dispcc DISP_CC_MDSS_ESC0_CLK>;
+
+            power-domains = <&dispcc DISP_CC_MDSS_CORE_GDSC>;
+
+            memory-region = <&cont_splash_mem>;
+
+            vci-supply = <&pmh0101_l13>;
+            vddio-supply = <&pmh0101_l12>;
+            vdd-supply = <&pmh0101_l11>;
+            vdds-supply = <&pmh0110_d_l3>;
         };
     };
 
