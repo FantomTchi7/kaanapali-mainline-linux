@@ -7,6 +7,7 @@
 #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
 
 #include "kaanapali.dtsi"
+#include "pmih0108-kaanapali.dtsi"    /* SPMI1: SID-7 (eUSB2 repeater) */
 
 / {
     model = "OnePlus 15";
@@ -772,6 +773,11 @@
     */
 };
 
+&pmih0108_e1_eusb2_repeater {
+    vdd18-supply = <&pmh0101_l15>;
+    vdd3-supply = <&pmh0101_l5>;
+};
+
 &tlmm {
     gpio-reserved-ranges = <36 8>, <74 1>, <119 2>, <144 4>;
 };
@@ -790,6 +796,36 @@
 &ufs_mem_phy {
     vdda-phy-supply = <&pmh0110_g_l4>;
     vdda-pll-supply = <&pmh0110_d_l1>;
+
+    status = "okay";
+};
+
+/*
+ * USB: Port power / role switching on Kaanapali is driven by the ADSP
+ * through PMIC GLINK, which is not yet wired up in mainline. Without ADSP
+ * firmware loaded, the port cannot source VBUS for host mode, so fall back
+ * to peripheral (gadget) mode which just needs the host on the other end
+ * of the cable to provide VBUS. Once PMIC GLINK / UCSI is in place the
+ * dr_mode can be switched to "otg" and the role switch hooked up.
+ */
+&usb {
+    dr_mode = "peripheral";
+
+    status = "okay";
+};
+
+&usb_dp_qmpphy {
+    vdda-phy-supply = <&pmh0110_d_l1>;
+    vdda-pll-supply = <&pmh0110_f_l4>;
+
+    status = "okay";
+};
+
+&usb_hsphy {
+    vdd-supply = <&pmh0110_f_l4>;
+    vdda12-supply = <&pmh0110_d_l1>;
+
+    phys = <&pmih0108_e1_eusb2_repeater>;
 
     status = "okay";
 };
