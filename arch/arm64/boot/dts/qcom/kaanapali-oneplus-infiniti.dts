@@ -801,6 +801,37 @@
 };
 
 /*
+ * LPASS: The LPASS LPI pinctrl and audio codec/soundwire nodes reference
+ * q6prmcc clocks provided by the ADSP remoteproc. Since the ADSP is not
+ * enabled on this board (no firmware), the clock provider can never probe,
+ * causing an infinite -EPROBE_DEFER loop that hangs boot. Disable all
+ * LPASS audio nodes until ADSP is brought up.
+ */
+&lpass_tlmm {
+    status = "disabled";
+};
+
+&lpass_vamacro {
+    status = "disabled";
+};
+
+&lpass_wsa2macro {
+    status = "disabled";
+};
+
+&lpass_rxmacro {
+    status = "disabled";
+};
+
+&lpass_txmacro {
+    status = "disabled";
+};
+
+&lpass_wsamacro {
+    status = "disabled";
+};
+
+/*
  * USB: Port power / role switching on Kaanapali is driven by the ADSP
  * through PMIC GLINK, which is not yet wired up in mainline. Without ADSP
  * firmware loaded, the port cannot source VBUS for host mode, so fall back
