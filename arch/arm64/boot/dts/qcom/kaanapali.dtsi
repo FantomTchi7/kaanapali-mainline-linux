@@ -3558,6 +3558,7 @@
 			tx-fifo-resize;
 
 			dma-coherent;
+			usb-role-switch;
 
 			status = "disabled";
 
