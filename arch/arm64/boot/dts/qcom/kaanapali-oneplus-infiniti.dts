@@ -88,6 +88,51 @@
             clock-div = <2>;
         };
     };
+
+    pmic-glink {
+        compatible = "qcom,sm8750-pmic-glink",
+                     "qcom,sm8550-pmic-glink",
+                     "qcom,pmic-glink";
+        #address-cells = <1>;
+        #size-cells = <0>;
+        orientation-gpios = <&tlmm 60 GPIO_ACTIVE_HIGH>;
+
+        connector@0 {
+            compatible = "usb-c-connector";
+            reg = <0>;
+
+            power-role = "dual";
+            data-role = "dual";
+
+            ports {
+                #address-cells = <1>;
+                #size-cells = <0>;
+
+                port@0 {
+                    reg = <0>;
+
+                    pmic_glink_hs_in: endpoint {
+                        remote-endpoint = <&usb_dwc3_hs>;
+                    };
+                };
+
+                port@1 {
+                    reg = <1>;
+
+                    pmic_glink_ss_in: endpoint {
+                        remote-endpoint = <&usb_dp_qmpphy_out>;
+                    };
+                };
+
+                port@2 {
+                    reg = <2>;
+
+                    pmic_glink_sbu: endpoint {
+                    };
+                };
+            };
+        };
+    };
 };
 
 &apps_rsc {
@@ -806,6 +851,7 @@
  * enabled on this board (no firmware), the clock provider can never probe,
  * causing an infinite -EPROBE_DEFER loop that hangs boot. Disable all
  * LPASS audio nodes until ADSP is brought up.
+ */
 &lpass_tlmm {
     status = "disabled";
 };
@@ -829,19 +875,15 @@
 &lpass_wsamacro {
     status = "disabled";
 };
-*/
 
 /*
- * USB: Port power / role switching on Kaanapali is driven by the ADSP
- * through PMIC GLINK, which is not yet wired up in mainline. Without ADSP
- * firmware loaded, the port cannot source VBUS for host mode, so fall back
- * to peripheral (gadget) mode which just needs the host on the other end
- * of the cable to provide VBUS. Once PMIC GLINK / UCSI is in place the
- * dr_mode can be switched to "otg" and the role switch hooked up.
+ * USB: Type-C role switching, orientation and VBUS control are driven by
+ * the SOCCP through PMIC GLINK. The DT structure matches the final upstream
+ * shape (pmic-glink + usb-c-connector + OTG role switch), but role events
+ * will only fire once SOCCP remoteproc firmware is loaded, which is not
+ * yet supported on mainline kaanapali.
  */
 &usb {
-    dr_mode = "peripheral";
-
     status = "okay";
 };
 
@@ -850,6 +892,14 @@
     vdda-pll-supply = <&pmh0110_f_l4>;
 
     status = "okay";
+};
+
+&usb_dp_qmpphy_out {
+    remote-endpoint = <&pmic_glink_ss_in>;
+};
+
+&usb_dwc3_hs {
+    remote-endpoint = <&pmic_glink_hs_in>;
 };
 
 &usb_hsphy {
