@@ -753,7 +753,6 @@
         };
     };
 
-    /*
     regulators-8 {
         compatible = "qcom,pm8010-rpmh-regulators";
         qcom,pmic-id = "N_E1";
@@ -815,7 +814,6 @@
             regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
         };
     };
-    */
 };
 
 &pmih0108_e1_eusb2_repeater {
