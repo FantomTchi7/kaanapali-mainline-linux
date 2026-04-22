@@ -95,7 +95,6 @@
                      "qcom,pmic-glink";
         #address-cells = <1>;
         #size-cells = <0>;
-        orientation-gpios = <&tlmm 60 GPIO_ACTIVE_HIGH>;
 
         connector@0 {
             compatible = "usb-c-connector";
@@ -874,12 +873,20 @@
     status = "disabled";
 };
 
+&remoteproc_soccp {
+    firmware-name = "qcom/kaanapali/soccp.mbn",
+                    "qcom/kaanapali/soccp_dtb.mbn";
+
+    status = "okay";
+};
+
 /*
  * USB: Type-C role switching, orientation and VBUS control are driven by
- * the SOCCP through PMIC GLINK. The DT structure matches the final upstream
- * shape (pmic-glink + usb-c-connector + OTG role switch), but role events
- * will only fire once SOCCP remoteproc firmware is loaded, which is not
- * yet supported on mainline kaanapali.
+ * the SOCCP through PMIC GLINK (see &remoteproc_soccp above). Once the
+ * SOCCP firmware is loaded it opens the PMIC_RTR_SOCCP_APPS rpmsg channel
+ * on the SOCCP glink-edge, which the mainline pmic_glink driver auto-binds
+ * to, and the usb-c-connector / altmode / ucsi clients then drive role and
+ * orientation switching on the eUSB2 and USB3/DP QMP PHYs.
  */
 &usb {
     status = "okay";
