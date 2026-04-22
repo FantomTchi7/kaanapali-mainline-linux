@@ -806,7 +806,6 @@
  * enabled on this board (no firmware), the clock provider can never probe,
  * causing an infinite -EPROBE_DEFER loop that hangs boot. Disable all
  * LPASS audio nodes until ADSP is brought up.
- */
 &lpass_tlmm {
     status = "disabled";
 };
@@ -830,6 +829,7 @@
 &lpass_wsamacro {
     status = "disabled";
 };
+*/
 
 /*
  * USB: Port power / role switching on Kaanapali is driven by the ADSP
