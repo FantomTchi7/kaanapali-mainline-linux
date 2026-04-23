@@ -1597,6 +1597,15 @@ static const struct qcom_pas_data kaanapali_soccp_resource = {
 	.dtb_pas_id = 0x41,
 	.minidump_id = 24,
 	.auto_boot = true,
+	/*
+	 * SoCCP is brought out of reset and authenticated by XBL/SBL before
+	 * Linux starts, so we must not call qcom_scm_pas_init_image() /
+	 * auth_and_reset again - TZ will reject the re-init with -EINVAL.
+	 * early_boot=true makes qcom_q6v5_init() wire up the ping/pong SMP2P
+	 * path and qcom_pas_probe() transition the rproc to RPROC_DETACHED
+	 * so the core takes the .attach() path instead of .start().
+	 */
+	.early_boot = true,
 	.proxy_pd_names = (char*[]){
 		"cx",
 		"mx",
